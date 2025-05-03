@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import Layout from '../components/Layout';
 
 const PLANT_RECOMMENDATIONS = {
     hujan: ['Padi', 'Bayam', 'Sawi', 'Kangkung'],
@@ -31,7 +30,7 @@ export default function Recommendation() {
     };
 
     return (
-        <Layout>
+        <>
             <h1 className="text-3xl font-bold mb-4">Rekomendasi Tanaman</h1>
             <p className="mb-4">Musim saat ini: <strong>{season.toUpperCase()}</strong></p>
             <form onSubmit={handleSubmit} className="mb-4 flex flex-col gap-2">
@@ -57,6 +56,6 @@ export default function Recommendation() {
                     </ul>
                 </div>
             )}
-        </Layout>
+        </>
     );
 }

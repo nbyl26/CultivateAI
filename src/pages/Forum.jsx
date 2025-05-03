@@ -9,8 +9,6 @@ import {
     orderBy,
 } from 'firebase/firestore';
 
-import Layout from '../components/Layout';
-
 export default function Forum() {
     const [message, setMessage] = useState('');
     const [posts, setPosts] = useState([]);
@@ -41,7 +39,7 @@ export default function Forum() {
     };
 
     return (
-        <Layout>
+        <>
             <h1 className="text-3xl font-bold mb-6 text-center">Forum Diskusi Petani</h1>
 
             <form onSubmit={handleSubmit} className="mb-6 max-w-xl mx-auto flex gap-2">
@@ -67,6 +65,6 @@ export default function Forum() {
                     </div>
                 ))}
             </div>
-        </Layout>
+        </>
     );
 }

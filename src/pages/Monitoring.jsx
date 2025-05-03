@@ -11,8 +11,6 @@ import {
     doc,
 } from 'firebase/firestore';
 
-import Layout from '../components/Layout';
-
 export default function Monitoring() {
     const [plant, setPlant] = useState('');
     const [note, setNote] = useState('');
@@ -48,7 +46,7 @@ export default function Monitoring() {
     }, []);
 
     return (
-        <Layout>
+        <>
             <h1 className="text-3xl font-bold mb-6 text-center">Monitoring Tanaman</h1>
 
             <form onSubmit={handleSubmit} className="mb-6 max-w-xl mx-auto flex flex-col gap-2">
@@ -86,6 +84,6 @@ export default function Monitoring() {
                     </div>
                 ))}
             </div>
-        </Layout>
+        </>
     );
 }

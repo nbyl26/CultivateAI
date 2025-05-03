@@ -22,7 +22,7 @@ export default function Dashboard() {
     };
 
     return (
-        <Layout>
+        <>
             <h1 className="text-4xl font-bold text-green-700 mb-6 text-center">
                 Selamat datang di <span className="text-green-900">CultivateAI</span> 👩‍🌾
             </h1>
@@ -49,6 +49,6 @@ export default function Dashboard() {
                     Keluar
                 </Button>
             </div>
-        </Layout>
+        </>
     );
 }

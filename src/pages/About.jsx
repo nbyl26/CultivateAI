@@ -1,8 +1,6 @@
-import Layout from "../components/Layout";
-
 export default function About() {
     return (
-        <Layout>
+        <>
             <h1 className="text-3xl font-bold mb-4">Tentang CultivateAI</h1>
             <p className="mb-4">
                 CultivateAI adalah aplikasi berbasis AI yang dirancang untuk membantu petani kecil di
@@ -18,6 +16,6 @@ export default function About() {
                 Solusi ini dikembangkan dalam rangka Google Solution Challenge 2025 dengan harapan
                 memberdayakan komunitas pertanian lokal menggunakan teknologi cerdas dan terjangkau.
             </p>
-        </Layout>
+        </>
     );
 }
