@@ -1,9 +1,9 @@
 import { auth } from '../firebase';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
-
-import Layout from '../components/Layout';
 import GeminiChat from '../components/GeminiChat';
+import { motion } from 'framer-motion';
+import Layout from '../components/Layout';
 
 
 export default function Dashboard() {

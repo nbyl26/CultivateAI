@@ -1,67 +1,73 @@
 import { useState } from 'react';
 import axios from 'axios';
+import Button from './Button';
 
 export default function GeminiChat() {
     const [input, setInput] = useState('');
     const [chat, setChat] = useState([]);
     const [loading, setLoading] = useState(false);
 
-    const API_KEY = "AIzaSyBlf0OnGKGxok-XJp_FMCj2i-jph5dAvZA";
+    const API_KEY = 'AIzaSyBlf0OnGKGxok-XJp_FMCj2i-jph5dAvZA';
 
     const sendMessage = async () => {
         if (!input.trim()) return;
-        setLoading(true);
 
-        const userMessage = { role: "user", parts: [{ text: input }] };
-        const newChat = [...chat, userMessage];
+        setLoading(true);
+        const userMessage = { role: 'user', parts: [{ text: input }] };
+        const updatedChat = [...chat, userMessage];
 
         try {
             const res = await axios.post(
-                "https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=" + API_KEY,
-                {
-                    contents: newChat,
-                }
+                `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${API_KEY}`,
+                { contents: updatedChat }
             );
 
             const botResponse = {
-                role: "model",
+                role: 'model',
                 parts: [{ text: res.data.candidates[0].content.parts[0].text }],
             };
 
-            setChat([...newChat, botResponse]);
+            setChat([...updatedChat, botResponse]);
             setInput('');
         } catch (err) {
-            alert("Error: " + err.message);
+            alert('Terjadi kesalahan: ' + err.message);
+        } finally {
+            setLoading(false);
         }
-
-        setLoading(false);
     };
 
     return (
-        <div className="p-4 max-w-xl mx-auto">
-            <div className="bg-white border rounded h-96 overflow-y-scroll p-4 mb-4 space-y-2">
+        <div className="bg-white shadow-xl rounded-2xl p-6 max-w-3xl mx-auto mt-10">
+            <h2 className="text-xl font-semibold mb-4 text-green-700">💬 Gemini Chatbot</h2>
+            <div className="h-72 overflow-y-auto border rounded-lg p-4 mb-4 bg-gray-50 space-y-3 text-sm">
                 {chat.map((msg, idx) => (
-                    <div key={idx} className={msg.role === 'user' ? 'text-right' : 'text-left'}>
-                        <div className={`inline-block p-2 rounded ${msg.role === 'user' ? 'bg-green-100' : 'bg-blue-100'}`}>
+                    <div
+                        key={idx}
+                        className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
+                    >
+                        <div
+                            className={`px-4 py-2 rounded-xl max-w-xs ${msg.role === 'user' ? 'bg-green-100 text-right' : 'bg-blue-100 text-left'
+                                }`}
+                        >
                             {msg.parts[0].text}
                         </div>
                     </div>
                 ))}
-                {loading && <p className="text-gray-400">Mengetik...</p>}
+                {loading && <p className="text-gray-400 italic">Gemini sedang mengetik...</p>}
             </div>
 
             <div className="flex gap-2">
                 <input
-                    className="border w-full p-2 rounded"
+                    className="border border-gray-300 rounded-lg px-4 py-2 flex-1 focus:outline-none focus:ring-2 focus:ring-green-400"
                     type="text"
                     placeholder="Tanyakan sesuatu..."
                     value={input}
-                    onChange={e => setInput(e.target.value)}
+                    onChange={(e) => setInput(e.target.value)}
                     onKeyDown={(e) => e.key === 'Enter' && sendMessage()}
                 />
-                <button className="bg-green-600 text-white px-4 py-2 rounded" onClick={sendMessage}>
+                <Button onClick={sendMessage} size="sm">
                     Kirim
-                </button>
+                </Button>
             </div>
         </div>
     );
