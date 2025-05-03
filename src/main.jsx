@@ -5,6 +5,8 @@ import App from './App.jsx'
 import Login from './pages/Login.jsx'
 import Register from './pages/Register.jsx'
 import Dashboard from './pages/Dashboard.jsx'
+import Recommendation from './pages/Recommendation.jsx';
+
 import './index.css'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
@@ -15,6 +17,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/recommendation" element={<Recommendation />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>,
