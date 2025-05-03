@@ -31,6 +31,12 @@ export default function Dashboard() {
                 >
                     Rekomendasi Tanaman
                 </button>
+                <button
+                    onClick={() => navigate('/forum')}
+                    className="mt-4 bg-purple-600 text-white px-4 py-2 rounded"
+                >
+                    Forum Petani
+                </button>
 
                 <button onClick={handleLogout} className="bg-red-500 text-white px-4 py-2 rounded">
                     Logout

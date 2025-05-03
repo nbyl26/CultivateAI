@@ -6,6 +6,8 @@ import Login from './pages/Login.jsx'
 import Register from './pages/Register.jsx'
 import Dashboard from './pages/Dashboard.jsx'
 import Recommendation from './pages/Recommendation.jsx';
+import Forum from './pages/Forum.jsx';
+
 
 import './index.css'
 
@@ -18,6 +20,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <Route path="/register" element={<Register />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/recommendation" element={<Recommendation />} />
+        <Route path="/forum" element={<Forum />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>,
