@@ -10,6 +10,9 @@ import {
     deleteDoc,
     doc,
 } from 'firebase/firestore';
+import Input from '../components/Input';
+import Button from '../components/Button';
+import { motion } from 'framer-motion';
 
 export default function Monitoring() {
     const [plant, setPlant] = useState('');
@@ -46,44 +49,58 @@ export default function Monitoring() {
     }, []);
 
     return (
-        <>
-            <h1 className="text-3xl font-bold mb-6 text-center">Monitoring Tanaman</h1>
+        <div className="max-w-2xl mx-auto px-4">
+            <h1 className="text-3xl font-bold mb-6 text-center text-green-700">
+                📋 Monitoring Tanaman
+            </h1>
 
-            <form onSubmit={handleSubmit} className="mb-6 max-w-xl mx-auto flex flex-col gap-2">
-                <input
-                    type="text"
-                    placeholder="Nama Tanaman"
+            <form
+                onSubmit={handleSubmit}
+                className="mb-8 bg-white p-6 rounded-xl shadow flex flex-col gap-4"
+            >
+                <Input
+                    placeholder="🌿 Nama Tanaman"
                     value={plant}
                     onChange={(e) => setPlant(e.target.value)}
-                    className="p-2 border rounded"
                 />
-                <input
-                    type="text"
-                    placeholder="Catatan (opsional)"
+                <Input
+                    placeholder="📝 Catatan (opsional)"
                     value={note}
                     onChange={(e) => setNote(e.target.value)}
-                    className="p-2 border rounded"
                 />
-                <button type="submit" className="bg-green-600 text-white px-4 py-2 rounded">
-                    Simpan
-                </button>
+                <Button type="submit" color="bg-green-600">
+                    Simpan Data
+                </Button>
             </form>
 
-            <div className="max-w-xl mx-auto space-y-4">
+            <div className="space-y-4">
+                {data.length === 0 && (
+                    <p className="text-center text-gray-500">Belum ada data monitoring.</p>
+                )}
                 {data.map(item => (
-                    <div key={item.id} className="bg-white p-4 rounded shadow">
-                        <h2 className="font-semibold">{item.plant}</h2>
-                        <p className="text-sm text-gray-600">Dicatat: {item.date}</p>
-                        {item.note && <p className="mt-1">{item.note}</p>}
+                    <motion.div
+                        key={item.id}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.3 }}
+                        className="bg-white p-4 rounded-xl shadow"
+                    >
+                        <h2 className="text-lg font-semibold text-green-800">{item.plant}</h2>
+                        <p className="text-sm text-gray-500">📅 Dicatat: {item.date}</p>
+                        {item.note && (
+                            <p className="mt-2 text-gray-700">
+                                📝 {item.note}
+                            </p>
+                        )}
                         <button
                             onClick={() => handleDelete(item.id)}
-                            className="mt-2 text-red-600 text-sm underline"
+                            className="mt-4 text-sm text-red-600 underline"
                         >
                             Hapus
                         </button>
-                    </div>
+                    </motion.div>
                 ))}
             </div>
-        </>
+        </div>
     );
 }
