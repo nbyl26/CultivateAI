@@ -1,10 +1,10 @@
-import { auth } from '../firebase';
-import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
-import GeminiChat from '../components/GeminiChat';
-import { motion } from 'framer-motion';
-import Layout from '../components/Layout';
+import { useNavigate } from 'react-router-dom';
+import { auth } from '../firebase';
 
+import Layout from '../components/Layout';
+import GeminiChat from '../components/GeminiChat';
+import Button from '../components/Button';
 
 export default function Dashboard() {
     const navigate = useNavigate();
@@ -23,40 +23,31 @@ export default function Dashboard() {
 
     return (
         <Layout>
-            <div className="min-h-screen flex items-center justify-center bg-green-50">
-                <div className="text-center">
-                    <h1 className="text-3xl font-bold mb-4">Selamat datang di CultivateAI!</h1>
-                    <GeminiChat />
-                    <button
-                        onClick={() => navigate('/recommendation')}
-                        className="mt-4 bg-blue-600 text-white px-4 py-2 rounded"
-                    >
-                        Rekomendasi Tanaman
-                    </button>
-                    <button
-                        onClick={() => navigate('/forum')}
-                        className="mt-4 bg-purple-600 text-white px-4 py-2 rounded"
-                    >
-                        Forum Petani
-                    </button>
-                    <button
-                        onClick={() => navigate('/monitoring')}
-                        className="mt-4 bg-yellow-600 text-white px-4 py-2 rounded"
-                    >
-                        Monitoring Tanaman
-                    </button>
-                    <button
-                        onClick={() => navigate('/about')}
-                        className="mt-4 bg-gray-700 text-white px-4 py-2 rounded"
-                    >
-                        Tentang Aplikasi
-                    </button>
+            <h1 className="text-4xl font-bold text-green-700 mb-6 text-center">
+                Selamat datang di <span className="text-green-900">CultivateAI</span> 👩‍🌾
+            </h1>
 
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full max-w-md mx-auto mb-10">
+                <Button onClick={() => navigate('/recommendation')} color="bg-blue-600">
+                    🌿 Rekomendasi Tanaman
+                </Button>
+                <Button onClick={() => navigate('/forum')} color="bg-purple-600">
+                    💬 Forum Petani
+                </Button>
+                <Button onClick={() => navigate('/monitoring')} color="bg-yellow-500">
+                    📊 Monitoring Tanaman
+                </Button>
+                <Button onClick={() => navigate('/about')} color="bg-gray-700">
+                    ℹ️ Tentang Aplikasi
+                </Button>
+            </div>
 
-                    <button onClick={handleLogout} className="bg-red-500 text-white px-4 py-2 rounded">
-                        Logout
-                    </button>
-                </div>
+            <GeminiChat />
+
+            <div className="mt-10 text-center">
+                <Button onClick={handleLogout} color="bg-red-500">
+                    Keluar
+                </Button>
             </div>
         </Layout>
     );
