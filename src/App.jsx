@@ -16,13 +16,13 @@ export default function App() {
           🌱 CultivateAI
         </h1>
         <p className="mb-6 text-lg text-gray-700 leading-relaxed">
-          Solusi cerdas berbasis AI untuk petani kecil di Asia Pasifik dalam menciptakan pertanian berkelanjutan.
+          AI-based smart solutions for smallholder farmers in Asia Pacific to create sustainable agriculture.
         </p>
         <button
           onClick={() => navigate('/login')}
           className="bg-green-600 text-white px-6 py-3 rounded-lg text-lg hover:bg-green-700 transition-all duration-200 shadow-md"
         >
-          Mulai Sekarang
+          Start Now
         </button>
       </motion.div>
     </div>
