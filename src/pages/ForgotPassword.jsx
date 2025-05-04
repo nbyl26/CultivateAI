@@ -37,8 +37,8 @@ export default function ForgotPassword() {
                 <div className="w-1/2 p-10 flex flex-col justify-center">
                     <div className="mb-6">
                         <img src={Logo} alt="CultivateAI Logo" className="h-10 mb-4" />
-                        <h1 className="text-3xl font-bold text-green-700">Lupa Password</h1>
-                        <p className="text-sm text-gray-500">Masukkan email untuk menerima tautan reset password.</p>
+                        <h1 className="text-3xl font-bold text-green-700">Forgot Password</h1>
+                        <p className="text-sm text-gray-500">Enter email to receive password reset link.</p>
                     </div>
 
                     {message && <p className="text-green-600 text-sm mb-4">{message}</p>}
@@ -60,12 +60,12 @@ export default function ForgotPassword() {
                             type="submit"
                             className="w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded transition font-medium"
                         >
-                            Kirim Tautan Reset
+                            Send Reset Link
                         </button>
                     </form>
 
                     <div className="mt-6 text-sm text-center">
-                        Kembali ke{' '}
+                        Back to{' '}
                         <Link to="/login" className="text-green-700 hover:underline font-medium">
                             Login
                         </Link>
@@ -79,9 +79,9 @@ export default function ForgotPassword() {
                         alt="Petani Ilustrasi"
                         className="w-3/4 mb-4 max-w-sm drop-shadow-xl"
                     />
-                    <h2 className="text-xl font-bold">Lupa password bukan akhir segalanya</h2>
+                    <h2 className="text-xl font-bold">Forgetting your password isn't the end of the world</h2>
                     <p className="text-sm mt-2 text-center max-w-xs">
-                        Kami akan bantu Anda kembali masuk ke CultivateAI dan terus berkembang bersama komunitas.
+                        We'll help you get back into CultivateAI and continue to grow with the community.
                     </p>
                 </div>
             </motion.div>
