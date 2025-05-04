@@ -1,10 +1,13 @@
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState } from 'react';
 import clsx from 'clsx';
 import { Menu, X } from 'lucide-react';
+import { auth } from '../firebase';
+import { LogOut } from 'lucide-react';
 
 export default function Header() {
+    const navigate = useNavigate();
     const { pathname } = useLocation();
     const [isOpen, setIsOpen] = useState(false);
 
@@ -15,6 +18,11 @@ export default function Header() {
         { name: 'Monitoring', path: '/monitoring' },
         { name: 'Tentang', path: '/about' },
     ];
+
+    const handleLogout = () => {
+        auth.signOut();
+        navigate('/login');
+    };
 
     return (
         <motion.header
@@ -48,8 +56,18 @@ export default function Header() {
                 </nav>
 
                 {/* Avatar */}
-                <div className="hidden md:block w-8 h-8 rounded-full bg-green-300 text-white text-sm flex items-center justify-center font-semibold">
-                    U
+                <div className="flex items-center gap-4">
+                    <img
+                        src="https://ui-avatars.com/api/?name=User"
+                        alt="Avatar"
+                        className="w-9 h-9 rounded-full border"
+                    />
+                    <button
+                        onClick={handleLogout}
+                        className="flex items-center gap-2 text-sm text-red-500 hover:text-red-600"
+                    >
+                        <LogOut className="w-4 h-4" /> Logout
+                    </button>
                 </div>
 
                 {/* Mobile menu toggle */}
