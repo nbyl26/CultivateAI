@@ -55,8 +55,7 @@ export default function Header() {
                     ))}
                 </nav>
 
-                {/* Avatar */}
-                <div className="flex items-center gap-4">
+                <div className="hidden md:flex items-center gap-4">
                     <img
                         src="https://ui-avatars.com/api/?name=User"
                         alt="Avatar"
@@ -70,10 +69,17 @@ export default function Header() {
                     </button>
                 </div>
 
-                {/* Mobile menu toggle */}
-                <button onClick={() => setIsOpen(!isOpen)} className="md:hidden text-gray-700">
-                    {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-                </button>
+                {/* Mobile - Avatar & Menu Toggle */}
+                <div className="md:hidden flex items-center gap-3">
+                    <img
+                        src="https://ui-avatars.com/api/?name=User"
+                        alt="Avatar"
+                        className="w-9 h-9 rounded-full border"
+                    />
+                    <button onClick={() => setIsOpen(!isOpen)} className="text-gray-700">
+                        {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+                    </button>
+                </div>
             </div>
 
             {/* Mobile Navigation */}
@@ -102,10 +108,17 @@ export default function Header() {
                                     {item.name}
                                 </Link>
                             ))}
+                            {/* Logout Mobile */}
+                            <button
+                                onClick={handleLogout}
+                                className="flex items-center gap-2 text-sm text-red-500 hover:text-red-600 mt-2"
+                            >
+                                <LogOut className="w-4 h-4" /> Logout
+                            </button>
                         </div>
                     </motion.div>
                 )}
             </AnimatePresence>
-        </motion.header>
+        </motion.header >
     );
 }
