@@ -77,7 +77,9 @@ export default function Login() {
                                 className="w-full p-3 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500"
                             />
                             <div className="text-right mt-1">
-                                <a href="#" className="text-sm text-green-600 hover:underline">Forgot password?</a>
+                                <Link to="/forgot-password" className="text-sm text-green-600 hover:underline">
+                                    Forgot password?
+                                </Link>
                             </div>
                         </div>
                         <button
@@ -112,7 +114,7 @@ export default function Login() {
                 {/* Right Section - Illustration */}
                 <div className="w-1/2 bg-green-600 text-white flex flex-col items-center justify-center relative p-8">
                     <img
-                        src= {Farmers}
+                        src={Farmers}
                         alt="Petani Ilustrasi"
                         className="w-3/4 mb-4 max-w-sm drop-shadow-xl"
                     />
