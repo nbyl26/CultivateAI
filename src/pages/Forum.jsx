@@ -62,7 +62,7 @@ export default function Forum() {
                     ></textarea>
                     <div className="text-right mt-4">
                         <Button type="submit" color="bg-green-600 hover:bg-green-700 transition">
-                            Kirim
+                            Send
                         </Button>
                     </div>
                 </motion.form>
@@ -70,7 +70,7 @@ export default function Forum() {
                 {/* Posts */}
                 <div className="space-y-6">
                     {posts.length === 0 ? (
-                        <div className="text-center text-gray-500 italic">Belum ada diskusi. Ayo mulai percakapan pertama! 🌱</div>
+                        <div className="text-center text-gray-500 italic">No discussion yet. Let's start the first conversation! 🌱</div>
                     ) : (
                         posts.map((post) => (
                             <motion.div
@@ -93,9 +93,9 @@ export default function Forum() {
                                 <div className="flex items-center justify-between text-sm text-gray-500">
                                     <div className="flex items-center gap-2 cursor-pointer hover:text-green-600">
                                         <ThumbsUp size={16} />
-                                        <span>{post.likes ?? 0} Suka</span>
+                                        <span>{post.likes ?? 0} Like</span>
                                     </div>
-                                    <div className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full">#diskusi</div>
+                                    <div className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full">#discussion</div>
                                 </div>
                             </motion.div>
                         ))
