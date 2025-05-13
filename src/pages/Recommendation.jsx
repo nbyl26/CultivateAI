@@ -3,10 +3,37 @@ import { motion } from 'framer-motion';
 import { FiMapPin, FiAlertTriangle } from 'react-icons/fi';
 import { TbPlant } from 'react-icons/tb';
 
-const PLANT_RECOMMENDATIONS = {
-    hujan: ['Padi', 'Bayam', 'Sawi', 'Kangkung'],
-    kemarau: ['Jagung', 'Kacang Tanah', 'Singkong'],
-    transisi: ['Cabai', 'Tomat', 'Terong'],
+const CITY_PLANT_RECOMMENDATIONS = {
+    Jakarta: {
+        hujan: ['Padi', 'Bayam', 'Kangkung'],
+        kemarau: ['Jagung', 'Singkong', 'Kacang Tanah'],
+        transisi: ['Tomat', 'Cabai', 'Terong'],
+    },
+    Surabaya: {
+        hujan: ['Sawi', 'Selada', 'Bayam'],
+        kemarau: ['Jagung', 'Ketela', 'Kacang Hijau'],
+        transisi: ['Tomat', 'Cabai Rawit', 'Timun'],
+    },
+    Bandung: {
+        hujan: ['Kol', 'Wortel', 'Bayam'],
+        kemarau: ['Kentang', 'Tomat', 'Jagung'],
+        transisi: ['Brokoli', 'Cabai', 'Terong'],
+    },
+    Medan: {
+        hujan: ['Padi', 'Sawi', 'Kangkung'],
+        kemarau: ['Jagung', 'Ubi Jalar', 'Kacang Tanah'],
+        transisi: ['Terong', 'Tomat', 'Timun'],
+    },
+    Makassar: {
+        hujan: ['Bayam', 'Kangkung', 'Padi'],
+        kemarau: ['Jagung', 'Singkong', 'Kacang Tanah'],
+        transisi: ['Cabai', 'Tomat', 'Terong'],
+    },
+    Yogyakarta: {
+        hujan: ['Bayam', 'Kangkung', 'Sawi'],
+        kemarau: ['Jagung', 'Kedelai', 'Ubi'],
+        transisi: ['Tomat', 'Cabai', 'Terong'],
+    },
 };
 
 export default function Recommendation() {
@@ -14,6 +41,7 @@ export default function Recommendation() {
     const [season, setSeason] = useState('');
     const [recommendations, setRecommendations] = useState([]);
     const [showAlert, setShowAlert] = useState(false);
+    const [foundCity, setFoundCity] = useState('');
 
     useEffect(() => {
         const currentMonth = new Date().getMonth() + 1;
@@ -31,32 +59,43 @@ export default function Recommendation() {
             return;
         }
         setShowAlert(false);
-        const plants = PLANT_RECOMMENDATIONS[season] || [];
-        setRecommendations(plants);
+
+        const cityKey = Object.keys(CITY_PLANT_RECOMMENDATIONS).find(
+            (city) => city.toLowerCase() === location.trim().toLowerCase()
+        );
+
+        if (cityKey) {
+            setRecommendations(CITY_PLANT_RECOMMENDATIONS[cityKey][season] || []);
+            setFoundCity(cityKey);
+        } else {
+            const fallback = ['Tomat', 'Bayam', 'Jagung'];
+            setRecommendations(fallback);
+            setFoundCity('umum');
+        }
     };
 
     return (
         <motion.div
-            className="max-w-4xl mx-auto px-4 py-12"
+            className="max-w-6xl mx-auto px-4 py-12"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
         >
-            <div className="text-center mb-8">
-                <h1 className="text-4xl font-bold text-green-800">🌾 Rekomendasi Tanaman</h1>
+            <div className="text-center mb-10">
+                <h1 className="text-4xl font-bold text-green-800">🌱 Rekomendasi Tanaman</h1>
                 <p className="text-gray-600 mt-2">
-                    Musim saat ini: <span className="font-semibold text-green-700 uppercase">{season}</span>
+                    Berdasarkan musim saat ini: <span className="text-green-700 font-medium uppercase">{season}</span>
                 </p>
             </div>
 
-            <form onSubmit={handleSubmit} className="flex flex-col md:flex-row items-center gap-4 justify-center mb-6">
+            <form onSubmit={handleSubmit} className="flex flex-col md:flex-row items-center gap-4 justify-center mb-8">
                 <div className="relative w-full max-w-md">
                     <FiMapPin className="absolute left-3 top-3.5 text-gray-400" />
                     <input
                         type="text"
                         value={location}
                         onChange={(e) => setLocation(e.target.value)}
-                        placeholder="Masukkan lokasi Anda (misal: Bandung)"
+                        placeholder="Masukkan kota Anda (misal: Surabaya)"
                         className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-green-500 focus:outline-none shadow-sm"
                     />
                 </div>
@@ -75,7 +114,7 @@ export default function Recommendation() {
                     animate={{ opacity: 1 }}
                 >
                     <FiAlertTriangle className="text-xl" />
-                    <span>Mohon isi lokasi terlebih dahulu.</span>
+                    <span>Mohon isi nama kota terlebih dahulu.</span>
                 </motion.div>
             )}
 
@@ -99,9 +138,9 @@ export default function Recommendation() {
                                 <TbPlant className="text-4xl" />
                             </div>
                             <h3 className="text-lg font-semibold text-gray-800">{plant}</h3>
-                            <p className="text-sm text-gray-500 mt-1">Tanaman cocok untuk musim {season}</p>
+                            <p className="text-sm text-gray-500 mt-1">Cocok untuk musim {season}</p>
                             <span className="inline-block mt-3 px-3 py-1 text-xs font-medium bg-green-100 text-green-700 rounded-full">
-                                Musim {season}
+                                {foundCity !== 'umum' ? foundCity : 'Data Umum'}
                             </span>
                         </motion.div>
                     ))}
@@ -114,8 +153,8 @@ export default function Recommendation() {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                 >
-                    <p>🌦️ Tips: Pastikan tanaman dipilih sesuai kondisi tanah dan iklim mikro di daerah Anda.</p>
-                    <p className="mt-1">📌 Catatan: Data berdasarkan musim nasional dan pola umum tanam di Indonesia.</p>
+                    <p>🌿 Tips: Pastikan kondisi tanah, ketersediaan air, dan sinar matahari sesuai dengan kebutuhan tanaman.</p>
+                    <p className="mt-1">📌 Data berdasarkan musim dan kota besar di Indonesia. Untuk hasil terbaik, konsultasikan dengan penyuluh pertanian setempat.</p>
                 </motion.div>
             )}
         </motion.div>
