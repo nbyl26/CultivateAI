@@ -5,6 +5,7 @@ import clsx from 'clsx';
 import { Menu, X } from 'lucide-react';
 import { auth } from '../firebase';
 import { LogOut } from 'lucide-react';
+import { FaUserCircle } from "react-icons/fa";
 
 export default function Header() {
     const navigate = useNavigate();
@@ -58,12 +59,7 @@ export default function Header() {
                 <div className="hidden md:flex items-center gap-6">
                     {/* Profile Avatar with Routing */}
                     <Link to="/profile">
-                        <img
-                            src="https://ui-avatars.com/api/?name=User"
-                            alt="Avatar"
-                            className="w-10 h-10 rounded-full border border-green-300 hover:ring-2 hover:ring-green-500 cursor-pointer transition-all"
-                            title="View Profile"
-                        />
+                        <FaUserCircle className="w-8 h-8 text-green-700 hover:ring-2 hover:ring-green-500 rounded-full cursor-pointer transition-all" />
                     </Link>
 
                     {/* Logout Button */}

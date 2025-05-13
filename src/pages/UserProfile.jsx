@@ -3,10 +3,12 @@ import { motion } from 'framer-motion';
 import { auth } from '../firebase';
 import { onAuthStateChanged } from 'firebase/auth';
 
-import Button from '../components/Button'
-import Card from '../components/Card'
-import Input from '../components/Input'
+import Button from '../components/Button';
+import Card from '../components/Card';
+import Input from '../components/Input';
 import { toast } from 'sonner';
+
+import { FaUserCircle } from "react-icons/fa";
 
 export default function UserProfile() {
     const [user, setUser] = useState(null);
@@ -46,13 +48,9 @@ export default function UserProfile() {
             <p className="text-gray-600">Welcome back, {displayName}!</p>
 
             <Card>
-                <CardContent className="p-6 flex flex-col md:flex-row gap-6 items-start">
+                <div className="p-6 flex flex-col md:flex-row gap-6 items-start">
                     <div className="flex-shrink-0">
-                        <img
-                            src={user?.photoURL || '/default-avatar.png'}
-                            alt="User Avatar"
-                            className="w-28 h-28 rounded-full shadow-md object-cover"
-                        />
+                        <FaUserCircle className="w-16 h-16 text-green-600" />   
                     </div>
                     <div className="flex-1 space-y-2">
                         <h2 className="text-xl font-semibold">{displayName}</h2>
@@ -61,11 +59,11 @@ export default function UserProfile() {
                         <p className="text-sm text-gray-500">Location: {location}</p>
                         <Button className="mt-2">Edit Profile</Button>
                     </div>
-                </CardContent>
+                </div>
             </Card>
 
             <Card>
-                <CardContent className="p-6 space-y-4">
+                <div className="p-6 space-y-4">
                     <h3 className="text-lg font-medium text-green-700">🔧 Account Settings</h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
@@ -95,18 +93,18 @@ export default function UserProfile() {
                             Delete Account
                         </Button>
                     </div>
-                </CardContent>
+                </div>
             </Card>
 
             <Card>
-                <CardContent className="p-6">
+                <div className="p-6">
                     <h3 className="text-lg font-medium text-green-700">📊 Recent Activity</h3>
                     <ul className="mt-2 text-sm text-gray-700 list-disc list-inside">
                         <li>Last searched crop: Corn (May 2025)</li>
                         <li>Forum posts: 5 contributions</li>
                         <li>Monitoring alerts: 2 active warnings</li>
                     </ul>
-                </CardContent>
+                </div>
             </Card>
 
             <div className="text-right">
