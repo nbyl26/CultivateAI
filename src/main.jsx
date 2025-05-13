@@ -10,6 +10,7 @@ import Recommendation from './pages/Recommendation.jsx'
 import Forum from './pages/Forum.jsx'
 import Monitoring from './pages/Monitoring.jsx'
 import About from './pages/About.jsx'
+import Profile from './pages/UserProfile.jsx'
 
 import Layout from './components/Layout.jsx'
 import './index.css'
@@ -29,6 +30,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
           <Route path="/forum" element={<Forum />} />
           <Route path="/monitoring" element={<Monitoring />} />
           <Route path="/about" element={<About />} />
+          <Route path="/profile" element={<Profile />} />
         </Route>
       </Routes>
     </BrowserRouter>
