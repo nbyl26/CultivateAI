@@ -29,25 +29,25 @@ export default function Dashboard() {
                     onClick={() => navigate('/recommendation')}
                     className="flex items-center gap-2 text-gray-700 hover:text-green-700 font-medium"
                 >
-                    <Leaf className="w-5 h-5" /> Rekomendasi Tanaman
+                    <Leaf className="w-5 h-5" /> Crop Recommendations
                 </button>
                 <button
                     onClick={() => navigate('/forum')}
                     className="flex items-center gap-2 text-gray-700 hover:text-green-700 font-medium"
                 >
-                    <MessageSquareText className="w-5 h-5" /> Forum Petani
+                    <MessageSquareText className="w-5 h-5" /> Farmer's Forum
                 </button>
                 <button
                     onClick={() => navigate('/monitoring')}
                     className="flex items-center gap-2 text-gray-700 hover:text-green-700 font-medium"
                 >
-                    <BarChart2 className="w-5 h-5" /> Monitoring Tanaman
+                    <BarChart2 className="w-5 h-5" /> Plant Monitoring
                 </button>
                 <button
                     onClick={() => navigate('/about')}
                     className="flex items-center gap-2 text-gray-700 hover:text-green-700 font-medium"
                 >
-                    <Info className="w-5 h-5" /> Tentang Aplikasi
+                    <Info className="w-5 h-5" /> About App
                 </button>
             </aside>
 
