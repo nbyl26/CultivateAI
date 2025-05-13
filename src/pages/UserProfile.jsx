@@ -19,8 +19,8 @@ export default function UserProfile() {
         const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
             if (currentUser) {
                 setUser(currentUser);
-                setDisplayName(currentUser.displayName || 'User');
-                setLocation('Yogyakarta'); // mock
+                setDisplayName(currentUser.displayName || 'Nbyl26');
+                setLocation('Palembang'); // mock
             }
         });
         return () => unsubscribe();
@@ -68,6 +68,7 @@ export default function UserProfile() {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                             <label className="text-sm text-gray-600">Display Name</label>
+                            <br />
                             <Input
                                 type="text"
                                 value={displayName}
@@ -77,6 +78,7 @@ export default function UserProfile() {
                         </div>
                         <div>
                             <label className="text-sm text-gray-600">Location</label>
+                            <br />
                             <Input
                                 type="text"
                                 value={location}
