@@ -3,7 +3,7 @@ import { signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, Facebo
 import { auth } from '../firebase';
 import { useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { FcGoogle } from 'react-icons/fc';
+import { FcAddressBook, FcGoogle } from 'react-icons/fc';
 
 import Farmers from '../assets/images/farmers.png';
 import Logo from '../assets/images/logo.png';
@@ -120,7 +120,7 @@ export default function Login() {
                     />
                     <h2 className="text-xl font-bold">Get the best agriculture insights</h2>
                     <p className="text-sm mt-2 text-center max-w-xs">
-                        CultivateAI membantu petani dengan teknologi cerdas. Dapatkan rekomendasi dan diskusi langsung.
+                        CultivateAI helps you to manage your farm with AI-powered insights and recommendations.
                     </p>
                 </div>
             </motion.div>

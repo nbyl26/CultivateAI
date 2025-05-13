@@ -38,7 +38,7 @@ export default function GeminiChat() {
 
     return (
         <div className="bg-white shadow-xl rounded-2xl p-6 max-w-3xl mx-auto mt-10">
-            <h2 className="text-xl font-semibold mb-4 text-green-700">💬 Gemini Chatbot</h2>
+            <h2 className="text-xl font-semibold mb-4 text-green-700">💬 CultivateChat</h2>
             <div className="h-72 overflow-y-auto border rounded-lg p-4 mb-4 bg-gray-50 space-y-3 text-sm">
                 {chat.map((msg, idx) => (
                     <div
