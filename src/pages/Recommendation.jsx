@@ -1,162 +1,191 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { FiMapPin, FiAlertTriangle } from 'react-icons/fi';
-import { TbPlant } from 'react-icons/tb';
+import { FaMapMarkerAlt, FaLeaf } from 'react-icons/fa';
 
-const CITY_PLANT_RECOMMENDATIONS = {
+const CROP_DATA = {
     Jakarta: {
-        hujan: ['Padi', 'Bayam', 'Kangkung'],
-        kemarau: ['Jagung', 'Singkong', 'Kacang Tanah'],
-        transisi: ['Tomat', 'Cabai', 'Terong'],
+        dry: ['Corn', 'Chili', 'Eggplant'],
+        rainy: ['Rice', 'Spinach', 'Mustard Greens'],
+        transition: ['Tomato', 'Cucumber'],
     },
     Surabaya: {
-        hujan: ['Sawi', 'Selada', 'Bayam'],
-        kemarau: ['Jagung', 'Ketela', 'Kacang Hijau'],
-        transisi: ['Tomat', 'Cabai Rawit', 'Timun'],
+        dry: ['Corn', 'Soybeans', 'Chili'],
+        rainy: ['Rice', 'Spinach', 'Mustard Greens'],
+        transition: ['Tomato', 'Cabbage'],
     },
     Bandung: {
-        hujan: ['Kol', 'Wortel', 'Bayam'],
-        kemarau: ['Kentang', 'Tomat', 'Jagung'],
-        transisi: ['Brokoli', 'Cabai', 'Terong'],
+        dry: ['Chili', 'Carrot', 'Lettuce'],
+        rainy: ['Spinach', 'Rice', 'Mustard Greens'],
+        transition: ['Tomato', 'Kale'],
     },
     Medan: {
-        hujan: ['Padi', 'Sawi', 'Kangkung'],
-        kemarau: ['Jagung', 'Ubi Jalar', 'Kacang Tanah'],
-        transisi: ['Terong', 'Tomat', 'Timun'],
+        dry: ['Corn', 'Cassava', 'Chili'],
+        rainy: ['Rice', 'Spinach', 'Eggplant'],
+        transition: ['Tomato', 'Cucumber'],
     },
     Makassar: {
-        hujan: ['Bayam', 'Kangkung', 'Padi'],
-        kemarau: ['Jagung', 'Singkong', 'Kacang Tanah'],
-        transisi: ['Cabai', 'Tomat', 'Terong'],
+        dry: ['Cassava', 'Peanuts', 'Corn'],
+        rainy: ['Rice', 'Spinach', 'Mustard Greens'],
+        transition: ['Tomato', 'Eggplant'],
     },
     Yogyakarta: {
-        hujan: ['Bayam', 'Kangkung', 'Sawi'],
-        kemarau: ['Jagung', 'Kedelai', 'Ubi'],
-        transisi: ['Tomat', 'Cabai', 'Terong'],
+        dry: ['Chili', 'Corn', 'Sweet Potato'],
+        rainy: ['Spinach', 'Rice', 'Mustard Greens'],
+        transition: ['Tomato', 'Green Beans'],
+    },
+    Palembang: {
+        dry: ['Corn', 'Cassava', 'Chili'],
+        rainy: ['Rice', 'Spinach', 'Water Spinach'],
+        transition: ['Tomato', 'Cucumber'],
+    },
+    Semarang: {
+        dry: ['Corn', 'Peanuts', 'Chili'],
+        rainy: ['Rice', 'Mustard Greens', 'Cabbage'],
+        transition: ['Tomato', 'Green Beans'],
+    },
+    Balikpapan: {
+        dry: ['Corn', 'Chili', 'Eggplant'],
+        rainy: ['Rice', 'Spinach', 'Mustard Greens'],
+        transition: ['Tomato', 'Cucumber'],
+    },
+    Denpasar: {
+        dry: ['Corn', 'Cassava', 'Chili'],
+        rainy: ['Rice', 'Spinach', 'Mustard Greens'],
+        transition: ['Tomato', 'Cucumber'],
+    },
+    Banjarmasin: {
+        dry: ['Corn', 'Peanuts', 'Sweet Potato'],
+        rainy: ['Rice', 'Spinach', 'Mustard Greens'],
+        transition: ['Tomato', 'Cucumber'],
+    },
+    Pekanbaru: {
+        dry: ['Corn', 'Cassava', 'Chili'],
+        rainy: ['Rice', 'Spinach', 'Water Spinach'],
+        transition: ['Tomato', 'Cabbage'],
+    },
+    Manado: {
+        dry: ['Corn', 'Chili', 'Peanuts'],
+        rainy: ['Rice', 'Spinach', 'Eggplant'],
+        transition: ['Tomato', 'Green Beans'],
+    },
+    Pontianak: {
+        dry: ['Corn', 'Cassava', 'Chili'],
+        rainy: ['Rice', 'Spinach', 'Water Spinach'],
+        transition: ['Tomato', 'Cucumber'],
+    },
+    Malang: {
+        dry: ['Chili', 'Carrot', 'Lettuce'],
+        rainy: ['Spinach', 'Rice', 'Mustard Greens'],
+        transition: ['Tomato', 'Kale'],
     },
 };
 
-export default function Recommendation() {
-    const [location, setLocation] = useState('');
-    const [season, setSeason] = useState('');
-    const [recommendations, setRecommendations] = useState([]);
-    const [showAlert, setShowAlert] = useState(false);
-    const [foundCity, setFoundCity] = useState('');
+function getSeason(month) {
+    if ([12, 1, 2].includes(month)) return 'rainy';
+    if ([3, 4, 5, 6, 7, 8].includes(month)) return 'dry';
+    return 'transition';
+}
 
-    useEffect(() => {
-        const currentMonth = new Date().getMonth() + 1;
-        let currentSeason = '';
-        if (currentMonth >= 1 && currentMonth <= 3) currentSeason = 'hujan';
-        else if (currentMonth >= 4 && currentMonth <= 9) currentSeason = 'kemarau';
-        else currentSeason = 'transisi';
-        setSeason(currentSeason);
-    }, []);
+export default function Recommendation() {
+    const [city, setCity] = useState('');
+    const [plants, setPlants] = useState([]);
+    const [season, setSeason] = useState('');
+    const [error, setError] = useState('');
+    const [notFound, setNotFound] = useState(false);
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        if (!location.trim()) {
-            setShowAlert(true);
+        setError('');
+        setNotFound(false);
+        const trimmed = city.trim();
+        if (!trimmed) {
+            setError('Please enter a city name.');
             return;
         }
-        setShowAlert(false);
 
-        const cityKey = Object.keys(CITY_PLANT_RECOMMENDATIONS).find(
-            (city) => city.toLowerCase() === location.trim().toLowerCase()
-        );
+        const formattedCity = trimmed.charAt(0).toUpperCase() + trimmed.slice(1).toLowerCase();
+        const month = new Date().getMonth() + 1;
+        const currentSeason = getSeason(month);
+        setSeason(currentSeason);
 
-        if (cityKey) {
-            setRecommendations(CITY_PLANT_RECOMMENDATIONS[cityKey][season] || []);
-            setFoundCity(cityKey);
+        const matchedCity = CROP_DATA[formattedCity];
+        if (matchedCity && matchedCity[currentSeason]) {
+            setPlants(matchedCity[currentSeason]);
         } else {
-            const fallback = ['Tomat', 'Bayam', 'Jagung'];
-            setRecommendations(fallback);
-            setFoundCity('umum');
+            setNotFound(true);
+            setPlants([]);
         }
     };
 
     return (
-        <motion.div
-            className="max-w-6xl mx-auto px-4 py-12"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-        >
-            <div className="text-center mb-10">
-                <h1 className="text-4xl font-bold text-green-800">🌱 Rekomendasi Tanaman</h1>
-                <p className="text-gray-600 mt-2">
-                    Berdasarkan musim saat ini: <span className="text-green-700 font-medium uppercase">{season}</span>
+        <div className="max-w-4xl mx-auto px-4 py-12">
+            <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+                className="text-center mb-8"
+            >
+                <h1 className="text-3xl md:text-4xl font-bold text-green-700 flex justify-center items-center gap-2">
+                    🌾 Smart Crop Recommendations
+                </h1>
+                <p className="text-gray-600 mt-2 text-sm md:text-base max-w-xl mx-auto">
+                    Find the most suitable crops for your region based on seasonal and regional data.
                 </p>
-            </div>
+            </motion.div>
 
-            <form onSubmit={handleSubmit} className="flex flex-col md:flex-row items-center gap-4 justify-center mb-8">
-                <div className="relative w-full max-w-md">
-                    <FiMapPin className="absolute left-3 top-3.5 text-gray-400" />
+            <form onSubmit={handleSubmit} className="flex flex-col items-center gap-4">
+                <div className="w-full max-w-md relative">
+                    <FaMapMarkerAlt className="absolute left-3 top-3 text-green-600" />
                     <input
                         type="text"
-                        value={location}
-                        onChange={(e) => setLocation(e.target.value)}
-                        placeholder="Masukkan kota Anda (misal: Surabaya)"
-                        className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-green-500 focus:outline-none shadow-sm"
+                        value={city}
+                        onChange={(e) => setCity(e.target.value)}
+                        placeholder="Enter your city (e.g., Jakarta)"
+                        className="pl-10 pr-4 py-3 w-full rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 transition"
                     />
                 </div>
                 <button
                     type="submit"
-                    className="bg-green-600 hover:bg-green-700 transition text-white font-medium py-3 px-6 rounded-xl shadow"
+                    className="bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-6 rounded-lg shadow transition"
                 >
-                    🔍 Lihat Rekomendasi
+                    🔍 Get Recommendations
                 </button>
             </form>
 
-            {showAlert && (
-                <motion.div
-                    className="flex items-center justify-center gap-2 bg-yellow-100 text-yellow-800 px-4 py-3 rounded-md max-w-md mx-auto mb-6"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                >
-                    <FiAlertTriangle className="text-xl" />
-                    <span>Mohon isi nama kota terlebih dahulu.</span>
-                </motion.div>
-            )}
+            {error && <p className="text-red-600 text-sm mt-2 text-center">{error}</p>}
 
-            {recommendations.length > 0 && (
-                <motion.div
-                    className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-10"
-                    initial="hidden"
-                    animate="visible"
-                    variants={{
-                        hidden: { opacity: 0 },
-                        visible: { opacity: 1, transition: { staggerChildren: 0.2 } },
-                    }}
-                >
-                    {recommendations.map((plant, idx) => (
-                        <motion.div
-                            key={idx}
-                            className="bg-white rounded-xl border border-green-100 shadow-md p-6 text-center hover:shadow-lg transition"
-                            whileHover={{ scale: 1.03 }}
-                        >
-                            <div className="flex justify-center mb-3 text-green-600">
-                                <TbPlant className="text-4xl" />
-                            </div>
-                            <h3 className="text-lg font-semibold text-gray-800">{plant}</h3>
-                            <p className="text-sm text-gray-500 mt-1">Cocok untuk musim {season}</p>
-                            <span className="inline-block mt-3 px-3 py-1 text-xs font-medium bg-green-100 text-green-700 rounded-full">
-                                {foundCity !== 'umum' ? foundCity : 'Data Umum'}
-                            </span>
-                        </motion.div>
-                    ))}
-                </motion.div>
-            )}
-
-            {recommendations.length > 0 && (
-                <motion.div
-                    className="mt-10 max-w-2xl mx-auto text-center text-sm text-gray-500"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                >
-                    <p>🌿 Tips: Pastikan kondisi tanah, ketersediaan air, dan sinar matahari sesuai dengan kebutuhan tanaman.</p>
-                    <p className="mt-1">📌 Data berdasarkan musim dan kota besar di Indonesia. Untuk hasil terbaik, konsultasikan dengan penyuluh pertanian setempat.</p>
-                </motion.div>
-            )}
-        </motion.div>
+            <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.3 }}
+                className="mt-10"
+            >
+                {notFound ? (
+                    <div className="text-center text-gray-600 mt-6">
+                        <p className="text-lg">Currently, we don’t have detailed crop data for this city.</p>
+                        <p className="text-sm mt-1">Please try a nearby major city instead.</p>
+                    </div>
+                ) : plants.length > 0 ? (
+                    <div className="mt-6">
+                        <h2 className="text-xl font-semibold text-green-700 text-center mb-4">
+                            Recommended Crops for {city.charAt(0).toUpperCase() + city.slice(1)} ({season})
+                        </h2>
+                        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                            {plants.map((plant, idx) => (
+                                <div
+                                    key={idx}
+                                    className="bg-white rounded-xl p-4 shadow hover:shadow-md border border-gray-100 transition"
+                                >
+                                    <div className="flex items-center gap-2 text-green-700 font-semibold">
+                                        <FaLeaf /> {plant}
+                                    </div>
+                                    <p className="text-sm text-gray-500 mt-1">Ideal for the {season} season</p>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                ) : null}
+            </motion.div>
+        </div>
     );
 }
