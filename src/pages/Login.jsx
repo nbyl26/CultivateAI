@@ -1,5 +1,12 @@
 import { useState } from 'react';
-import { signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider} from 'firebase/auth';
+import {
+    signInWithEmailAndPassword,
+    signInWithPopup,
+    GoogleAuthProvider,
+    browserLocalPersistence,
+    browserSessionPersistence,
+    setPersistence
+} from 'firebase/auth';
 import { auth } from '../firebase';
 import { useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -14,25 +21,33 @@ export default function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+    const [rememberMe, setRememberMe] = useState(false);
     const navigate = useNavigate();
 
     const handleLogin = async (e) => {
         e.preventDefault();
         setError('');
+
+        const persistence = rememberMe ? browserLocalPersistence : browserSessionPersistence;
+
         try {
+            await setPersistence(auth, persistence);
             await signInWithEmailAndPassword(auth, email, password);
             navigate('/dashboard');
         } catch (err) {
-            setError('Email atau password salah.');
+            setError('Email or password is incorrect.');
         }
     };
 
     const handleGoogleLogin = async () => {
+        const persistence = rememberMe ? browserLocalPersistence : browserSessionPersistence;
+
         try {
+            await setPersistence(auth, persistence);
             await signInWithPopup(auth, googleProvider);
             navigate('/dashboard');
         } catch (err) {
-            setError('Login dengan Google gagal.');
+            setError('Google login failed.');
         }
     };
 
@@ -82,6 +97,21 @@ export default function Login() {
                                 </Link>
                             </div>
                         </div>
+
+                        {/* Remember Me */}
+                        <div className="flex items-center">
+                            <input
+                                type="checkbox"
+                                id="rememberMe"
+                                checked={rememberMe}
+                                onChange={(e) => setRememberMe(e.target.checked)}
+                                className="mr-2"
+                            />
+                            <label htmlFor="rememberMe" className="text-sm text-gray-600">
+                                Remember Me
+                            </label>
+                        </div>
+
                         <button
                             type="submit"
                             className="w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded transition font-medium"
@@ -115,7 +145,7 @@ export default function Login() {
                 <div className="w-1/2 bg-green-600 text-white flex flex-col items-center justify-center relative p-8">
                     <img
                         src={Farmers}
-                        alt="Petani Ilustrasi"
+                        alt="Farmer Illustration"
                         className="w-3/4 mb-4 max-w-sm drop-shadow-xl"
                     />
                     <h2 className="text-xl font-bold">Get the best agriculture insights</h2>
