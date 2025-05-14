@@ -91,7 +91,7 @@ export default function UserProfile() {
                         <Button onClick={handleUpdate} className="bg-green-600 hover:bg-green-700 text-white">
                             Save Changes
                         </Button>
-                        <Button variant="outline" className="hover:border-red-600 text-red-600" onClick={handleDeleteAccount}>
+                        <Button variant="outline" className="bg-red-600 hover:bg-red-700 text-red-600" onClick={handleDeleteAccount}>
                             Delete Account
                         </Button>
                     </div>
