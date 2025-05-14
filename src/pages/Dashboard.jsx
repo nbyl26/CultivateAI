@@ -1,26 +1,40 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { auth } from '../firebase';
 
 import { motion } from 'framer-motion';
 import { LogOut, Leaf, MessageSquareText, BarChart2, Info } from 'lucide-react';
 
-import Button from '../components/Button';
-import GeminiChat from '../components/ChatBot';
 import ChatBot from '../components/ChatBot';
 
 export default function Dashboard() {
     const navigate = useNavigate();
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const user = auth.currentUser;
-        if (!user) navigate('/login');
-    }, []);
+        const unsubscribe = auth.onAuthStateChanged((user) => {
+            if (!user) {
+                navigate('/login');
+            } else {
+                setLoading(false);
+            }
+        });
+
+        return () => unsubscribe(); // Clean up the listener
+    }, [navigate]);
 
     const handleLogout = () => {
         auth.signOut();
         navigate('/login');
     };
+
+    if (loading) {
+        return (
+            <div className="flex items-center justify-center h-screen">
+                <div className="text-green-700 font-semibold text-lg">Loading...</div>
+            </div>
+        );
+    }
 
     return (
         <div className="flex flex-1">
@@ -60,7 +74,7 @@ export default function Dashboard() {
                     transition={{ duration: 0.5 }}
                 >
                     <h1 className="text-3xl font-semibold text-gray-800 mb-4">
-                        Welcome to  <span className="text-green-700">CultivateAI</span> 👩‍🌾
+                        Welcome to <span className="text-green-700">CultivateAI</span> 👩‍🌾
                     </h1>
 
                     {/* Quick Stats */}
