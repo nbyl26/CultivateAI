@@ -2,7 +2,7 @@ import { useState } from 'react';
 import axios from 'axios';
 import Button from './Button';
 
-export default function GeminiChat() {
+export default function ChatBot() {
     const [input, setInput] = useState('');
     const [chat, setChat] = useState([]);
     const [loading, setLoading] = useState(false);

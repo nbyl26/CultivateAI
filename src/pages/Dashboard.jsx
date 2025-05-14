@@ -6,7 +6,8 @@ import { motion } from 'framer-motion';
 import { LogOut, Leaf, MessageSquareText, BarChart2, Info } from 'lucide-react';
 
 import Button from '../components/Button';
-import GeminiChat from '../components/GeminiChat';
+import GeminiChat from '../components/ChatBot';
+import ChatBot from '../components/ChatBot';
 
 export default function Dashboard() {
     const navigate = useNavigate();
@@ -59,7 +60,7 @@ export default function Dashboard() {
                     transition={{ duration: 0.5 }}
                 >
                     <h1 className="text-3xl font-semibold text-gray-800 mb-4">
-                        Selamat datang di <span className="text-green-700">CultivateAI</span> 👩‍🌾
+                        Welcome to  <span className="text-green-700">CultivateAI</span> 👩‍🌾
                     </h1>
 
                     {/* Quick Stats */}
@@ -90,7 +91,7 @@ export default function Dashboard() {
                     transition={{ delay: 0.2 }}
                     className="relative"
                 >
-                    <GeminiChat />
+                    <ChatBot />
                 </motion.div>
             </main>
         </div>
