@@ -14,7 +14,7 @@ export default function FeatureCard({ title, description, onClick, color = 'bg-g
             </div>
             <div className="mt-4">
                 <Button onClick={onClick} color={color}>
-                    Buka
+                    Open
                 </Button>
             </div>
         </motion.div>

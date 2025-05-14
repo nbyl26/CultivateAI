@@ -30,7 +30,7 @@ export default function ChatBot() {
             setChat([...updatedChat, botResponse]);
             setInput('');
         } catch (err) {
-            alert('Terjadi kesalahan: ' + err.message);
+            alert('Error occurred: ' + err.message);
         } finally {
             setLoading(false);
         }
@@ -53,20 +53,20 @@ export default function ChatBot() {
                         </div>
                     </div>
                 ))}
-                {loading && <p className="text-gray-400 italic">Gemini sedang mengetik...</p>}
+                {loading && <p className="text-gray-400 italic">CultivateChat is typing...</p>}
             </div>
 
             <div className="flex gap-2">
                 <input
                     className="border border-gray-300 rounded-lg px-4 py-2 flex-1 focus:outline-none focus:ring-2 focus:ring-green-400"
                     type="text"
-                    placeholder="Tanyakan sesuatu..."
+                    placeholder="Ask Something..."
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
                     onKeyDown={(e) => e.key === 'Enter' && sendMessage()}
                 />
                 <Button onClick={sendMessage} size="sm">
-                    Kirim
+                    Send
                 </Button>
             </div>
         </div>

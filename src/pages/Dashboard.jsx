@@ -66,19 +66,19 @@ export default function Dashboard() {
                     {/* Quick Stats */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                         <div className="bg-white p-4 rounded-xl shadow border-l-4 border-green-500">
-                            <p className="text-sm text-gray-500">Tanaman direkomendasikan</p>
+                            <p className="text-sm text-gray-500">Recommended Crop</p>
                             <h2 className="text-xl font-bold text-green-700">12</h2>
                         </div>
                         <div className="bg-white p-4 rounded-xl shadow border-l-4 border-purple-500">
-                            <p className="text-sm text-gray-500">Postingan forum</p>
+                            <p className="text-sm text-gray-500">Forum Posts</p>
                             <h2 className="text-xl font-bold text-purple-700">34</h2>
                         </div>
                         <div className="bg-white p-4 rounded-xl shadow border-l-4 border-yellow-500">
-                            <p className="text-sm text-gray-500">Laporan monitoring</p>
+                            <p className="text-sm text-gray-500">Monitoring Report</p>
                             <h2 className="text-xl font-bold text-yellow-700">5</h2>
                         </div>
                         <div className="bg-white p-4 rounded-xl shadow border-l-4 border-gray-500">
-                            <p className="text-sm text-gray-500">Pengguna aktif</p>
+                            <p className="text-sm text-gray-500">Active Users</p>
                             <h2 className="text-xl font-bold text-gray-700">21</h2>
                         </div>
                     </div>
