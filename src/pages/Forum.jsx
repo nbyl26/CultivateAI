@@ -1,15 +1,38 @@
 import { useEffect, useState } from 'react';
-import { db } from '../firebase';
-import { collection, addDoc, onSnapshot, serverTimestamp, query, orderBy } from 'firebase/firestore';
-import Button from '../components/Button';
-import Input from '../components/Input';
+import { db, auth } from '../firebase';
+import {
+    collection,
+    addDoc,
+    onSnapshot,
+    serverTimestamp,
+    query,
+    orderBy
+} from 'firebase/firestore';
+import { useNavigate } from 'react-router-dom';
 import { ThumbsUp } from 'lucide-react';
 import { motion } from 'framer-motion';
+import Button from '../components/Button';
 
 export default function Forum() {
     const [message, setMessage] = useState('');
     const [posts, setPosts] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const navigate = useNavigate();
 
+    // Cek login status
+    useEffect(() => {
+        const unsubscribe = auth.onAuthStateChanged((user) => {
+            if (!user) {
+                navigate('/login');
+            } else {
+                setLoading(false);
+            }
+        });
+
+        return () => unsubscribe();
+    }, [navigate]);
+
+    // Ambil data postingan dari Firestore
     useEffect(() => {
         const q = query(collection(db, 'forums'), orderBy('timestamp', 'desc'));
         const unsub = onSnapshot(q, (snapshot) => {
@@ -40,10 +63,20 @@ export default function Forum() {
         setMessage('');
     };
 
+    if (loading) {
+        return (
+            <div className="flex items-center justify-center h-screen">
+                <div className="text-green-700 font-semibold text-lg">Loading...</div>
+            </div>
+        );
+    }
+
     return (
         <div className="min-h-screen bg-green-50 py-10 px-4">
             <div className="max-w-4xl mx-auto bg-white p-8 rounded-xl shadow-xl">
-                <h1 className="text-4xl font-bold text-center text-green-800 mb-8">Forum Diskusi Petani</h1>
+                <h1 className="text-4xl font-bold text-center text-green-800 mb-8">
+                    Forum Diskusi Petani
+                </h1>
 
                 {/* Input form */}
                 <motion.form
@@ -70,7 +103,9 @@ export default function Forum() {
                 {/* Posts */}
                 <div className="space-y-6">
                     {posts.length === 0 ? (
-                        <div className="text-center text-gray-500 italic">No discussion yet. Let's start the first conversation! 🌱</div>
+                        <div className="text-center text-gray-500 italic">
+                            No discussion yet. Let's start the first conversation! 🌱
+                        </div>
                     ) : (
                         posts.map((post) => (
                             <motion.div
@@ -81,10 +116,21 @@ export default function Forum() {
                                 transition={{ duration: 0.4 }}
                             >
                                 <div className="flex items-center gap-3 mb-3">
-                                    <img src={post.user?.avatar || 'https://api.dicebear.com/7.x/bottts/svg?seed=user'} alt="Avatar" className="w-10 h-10 rounded-full" />
+                                    <img
+                                        src={
+                                            post.user?.avatar ||
+                                            'https://api.dicebear.com/7.x/bottts/svg?seed=user'
+                                        }
+                                        alt="Avatar"
+                                        className="w-10 h-10 rounded-full"
+                                    />
                                     <div>
-                                        <p className="text-sm font-semibold text-gray-800">{post.user?.name || 'Pengguna Anonim'}</p>
-                                        <p className="text-xs text-gray-500">{post.timestamp?.toDate().toLocaleString() || 'Baru saja'}</p>
+                                        <p className="text-sm font-semibold text-gray-800">
+                                            {post.user?.name || 'Pengguna Anonim'}
+                                        </p>
+                                        <p className="text-xs text-gray-500">
+                                            {post.timestamp?.toDate().toLocaleString() || 'Baru saja'}
+                                        </p>
                                     </div>
                                 </div>
 
@@ -95,7 +141,9 @@ export default function Forum() {
                                         <ThumbsUp size={16} />
                                         <span>{post.likes ?? 0} Like</span>
                                     </div>
-                                    <div className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full">#discussion</div>
+                                    <div className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full">
+                                        #discussion
+                                    </div>
                                 </div>
                             </motion.div>
                         ))
