@@ -1,4 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { onAuthStateChanged } from 'firebase/auth';
+import { auth } from '../firebase';
 import { motion } from 'framer-motion';
 import { FaMapMarkerAlt, FaLeaf } from 'react-icons/fa';
 
@@ -92,11 +95,27 @@ export default function Recommendation() {
     const [season, setSeason] = useState('');
     const [error, setError] = useState('');
     const [notFound, setNotFound] = useState(false);
+    const [user, setUser] = useState(null);
+    const navigate = useNavigate();
+
+    // 🔐 Proteksi halaman agar hanya user login yang bisa akses
+    useEffect(() => {
+        const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+            if (!currentUser) {
+                navigate('/login'); // redirect jika belum login
+            } else {
+                setUser(currentUser);
+            }
+        });
+
+        return () => unsubscribe();
+    }, [navigate]);
 
     const handleSubmit = (e) => {
         e.preventDefault();
         setError('');
         setNotFound(false);
+
         const trimmed = city.trim();
         if (!trimmed) {
             setError('Please enter a city name.');
@@ -117,75 +136,81 @@ export default function Recommendation() {
         }
     };
 
+    if (!user) {
+        return null; // hindari render sebelum auth selesai
+    }
+
     return (
-        <div className="max-w-4xl mx-auto px-4 py-12">
-            <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
-                className="text-center mb-8"
-            >
-                <h1 className="text-3xl md:text-4xl font-bold text-green-700 flex justify-center items-center gap-2">
-                    🌾 Smart Crop Recommendations
-                </h1>
-                <p className="text-gray-600 mt-2 text-sm md:text-base max-w-xl mx-auto">
-                    Find the most suitable crops for your region based on seasonal and regional data.
-                </p>
-            </motion.div>
-
-            <form onSubmit={handleSubmit} className="flex flex-col items-center gap-4">
-                <div className="w-full max-w-md relative">
-                    <FaMapMarkerAlt className="absolute left-3 top-3 text-green-600" />
-                    <input
-                        type="text"
-                        value={city}
-                        onChange={(e) => setCity(e.target.value)}
-                        placeholder="Enter your city (e.g., Jakarta)"
-                        className="pl-10 pr-4 py-3 w-full rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 transition"
-                    />
-                </div>
-                <button
-                    type="submit"
-                    className="bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-6 rounded-lg shadow transition"
+        <div className="min-h-screen bg-green-50 py-10 px-4">
+            <div className="max-w-4xl mx-auto bg-white p-8 rounded-xl shadow-xl">
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5 }}
+                    className="text-center mb-8"
                 >
-                    🔍 Get Recommendations
-                </button>
-            </form>
+                    <h1 className="text-3xl md:text-4xl font-bold text-green-700 flex justify-center items-center gap-2">
+                        🌾 Smart Crop Recommendations
+                    </h1>
+                    <p className="text-gray-600 mt-2 text-sm md:text-base max-w-xl mx-auto">
+                        Find the most suitable crops for your region based on seasonal and regional data.
+                    </p>
+                </motion.div>
 
-            {error && <p className="text-red-600 text-sm mt-2 text-center">{error}</p>}
-
-            <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.3 }}
-                className="mt-10"
-            >
-                {notFound ? (
-                    <div className="text-center text-gray-600 mt-6">
-                        <p className="text-lg">Currently, we don’t have detailed crop data for this city.</p>
-                        <p className="text-sm mt-1">Please try a nearby major city instead.</p>
+                <form onSubmit={handleSubmit} className="flex flex-col items-center gap-4">
+                    <div className="w-full max-w-md relative">
+                        <FaMapMarkerAlt className="absolute left-3 top-3 text-green-600" />
+                        <input
+                            type="text"
+                            value={city}
+                            onChange={(e) => setCity(e.target.value)}
+                            placeholder="Enter your city (e.g., Jakarta)"
+                            className="pl-10 pr-4 py-3 w-full rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 transition"
+                        />
                     </div>
-                ) : plants.length > 0 ? (
-                    <div className="mt-6">
-                        <h2 className="text-xl font-semibold text-green-700 text-center mb-4">
-                            Recommended Crops for {city.charAt(0).toUpperCase() + city.slice(1)} ({season})
-                        </h2>
-                        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                            {plants.map((plant, idx) => (
-                                <div
-                                    key={idx}
-                                    className="bg-white rounded-xl p-4 shadow hover:shadow-md border border-gray-100 transition"
-                                >
-                                    <div className="flex items-center gap-2 text-green-700 font-semibold">
-                                        <FaLeaf /> {plant}
-                                    </div>
-                                    <p className="text-sm text-gray-500 mt-1">Ideal for the {season} season</p>
-                                </div>
-                            ))}
+                    <button
+                        type="submit"
+                        className="bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-6 rounded-lg shadow transition"
+                    >
+                        🔍 Get Recommendations
+                    </button>
+                </form>
+
+                {error && <p className="text-red-600 text-sm mt-2 text-center">{error}</p>}
+
+                <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.3 }}
+                    className="mt-10"
+                >
+                    {notFound ? (
+                        <div className="text-center text-gray-600 mt-6">
+                            <p className="text-lg">Currently, we don’t have detailed crop data for this city.</p>
+                            <p className="text-sm mt-1">Please try a nearby major city instead.</p>
                         </div>
-                    </div>
-                ) : null}
-            </motion.div>
+                    ) : plants.length > 0 ? (
+                        <div className="mt-6">
+                            <h2 className="text-xl font-semibold text-green-700 text-center mb-4">
+                                Recommended Crops for {city.charAt(0).toUpperCase() + city.slice(1)} ({season})
+                            </h2>
+                            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                                {plants.map((plant, idx) => (
+                                    <div
+                                        key={idx}
+                                        className="bg-white rounded-xl p-4 shadow hover:shadow-md border border-gray-100 transition"
+                                    >
+                                        <div className="flex items-center gap-2 text-green-700 font-semibold">
+                                            <FaLeaf /> {plant}
+                                        </div>
+                                        <p className="text-sm text-gray-500 mt-1">Ideal for the {season} season</p>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    ) : null}
+                </motion.div>
+            </div>
         </div>
     );
 }
