@@ -75,7 +75,7 @@ export default function Forum() {
         <div className="min-h-screen bg-green-50 py-10 px-4">
             <div className="max-w-4xl mx-auto bg-white p-8 rounded-xl shadow-xl">
                 <h1 className="text-4xl font-bold text-center text-green-800 mb-8">
-                    Forum Diskusi Petani
+                    Farmer Discussion Forum 🌱
                 </h1>
 
                 {/* Input form */}
@@ -89,7 +89,7 @@ export default function Forum() {
                     <textarea
                         value={message}
                         onChange={(e) => setMessage(e.target.value)}
-                        placeholder="Tulis pertanyaan atau pengalamanmu..."
+                        placeholder="Write your question or experiences..."
                         rows={4}
                         className="w-full p-4 border border-green-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-600 transition text-sm"
                     ></textarea>
